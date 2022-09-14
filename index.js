@@ -11,7 +11,7 @@ app.use(cors());
 // UUr8u9p9OU6mNPJz
 
 
-const uri = "mongodb+srv://booktarikul:UUr8u9p9OU6mNPJz@cluster0.scp6egc.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.scp6egc.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
