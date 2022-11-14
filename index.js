@@ -157,9 +157,15 @@ async function run(){
   
     })
 
-    app.post('/carts', async (req, res) =>{
-      const cart = req.body;
-      const result = await cartCollection.insertOne(cart);
+    app.post('/carts', verifyJWT, async (req, res) =>{
+      // const id = req.params.id;
+      const orderId = (req.body.orderId);
+    //  console.log(orderId);
+      const query = {_id:ObjectId(orderId)};
+       const cart = req.body;
+        const result = await cartCollection.insertOne(cart);
+      console.log(result);
+    
      return res.send({success: true,result})
     })
 
@@ -171,7 +177,6 @@ async function run(){
 
     app.get('/carts', verifyJWT, async (req, res) =>{
       const customer = req.query.customer;
-      console.log('alamin',customer);
      const decodedEmail = req.decoded.email;
      if(customer === decodedEmail){
       const query = {customer: customer};
@@ -206,6 +211,43 @@ async function run(){
     res.send({result, token});
     })
 
+    app.put('/carts/:id', async(req, res) =>{
+      const id = req.params.id;
+      const updatedQuantity = req.body;
+      console.log(updatedQuantity)
+      const filter = {_id: ObjectId(id)};
+      const options = { upsert: true };
+      const updatedFinal = {
+          $set: {
+             quantity:updatedQuantity.quantity,
+             totalPrice:updatedQuantity.totalPrice
+          }
+      };
+    
+      console.log(updatedFinal)
+      const result = await cartCollection.updateOne(filter,updatedFinal, options);
+      res.send(result);
+  
+  })
+  //   app.put('/carts/:id', async(req, res) =>{
+  //     const id = req.params.id;
+  //     const updatedPrice = req.body;
+  //     console.log(updatedPrice)
+  //     const filter = {_id: ObjectId(id)};
+  //     const options = { upsert: true };
+  //     const updatedFinal = {
+  //         $set: {
+  //            price:updatedPrice.price
+  //         }
+  //     };
+    
+  //     // console.log(updatedFinal)
+  //     const result = await cartCollection.updateOne(filter,updatedFinal, options);
+  //     res.send(result);
+  
+  // })
+
+  
     }
     finally{
 
