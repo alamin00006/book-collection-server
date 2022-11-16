@@ -158,14 +158,15 @@ async function run(){
     })
 
     app.post('/carts', verifyJWT, async (req, res) =>{
-      // const id = req.params.id;
+      const alreadyCart = req.query.alreadyCart;
       const orderId = (req.body.orderId);
-    //  console.log(orderId);
-      const query = {_id:ObjectId(orderId)};
+      // const order = await cartCollection.find(orderId).toArray();
+      // if(order){
+      //   return;
+      // }
        const cart = req.body;
         const result = await cartCollection.insertOne(cart);
-      console.log(result);
-    
+ 
      return res.send({success: true,result})
     })
 
