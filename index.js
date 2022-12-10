@@ -45,6 +45,7 @@ async function run(){
         const cartCollection = client.db("allCart").collection("carts");
         const userOrderCollection = client.db("allCart").collection("carts");
         const userCollection = client.db('allUsers').collection('users');
+        const orderCollection = client.db('orders').collection('order');
 
 
        // get bestSeller books
@@ -146,6 +147,12 @@ async function run(){
         const sohokariBooks = await cursor.toArray();
         res.send(sohokariBooks);
       })
+    // app.get('/order', async(req, res) =>{
+    //     const query = {};
+    //     const cursor = orderCollection.find(query);
+    //     const sohokariBooks = await cursor.toArray();
+    //     res.send(sohokariBooks);
+    //   })
 
       app.get('/product6Details/:id', async(req, res) =>{
         const id = req.params.id;
@@ -157,39 +164,28 @@ async function run(){
   
     })
 
-    app.post('/carts', verifyJWT, async (req, res) =>{
-      const alreadyCart = req.query.alreadyCart;
-      const orderId = (req.body.orderId);
-      // const order = await cartCollection.find(orderId).toArray();
-      // if(order){
-      //   return;
-      // }
-       const cart = req.body;
-        const result = await cartCollection.insertOne(cart);
- 
-     return res.send({success: true,result})
-    })
 
-    // app.get('/carts', async (req, res) =>{
-    //   const query = {};
-    //   const result = await cartCollection.find(query).toArray();
-    //   res.send(result);
+
+    
+    // app.post('/carts', verifyJWT, async (req, res) =>{
+    //   const cart = req.body;
+    //   const result = await cartCollection.insertOne(cart);
+    //   return res.send({success: true,result})
     // })
-
-    app.get('/carts', verifyJWT, async (req, res) =>{
-      const customer = req.query.customer;
-     const decodedEmail = req.decoded.email;
-     if(customer === decodedEmail){
-      const query = {customer: customer};
-      const order = await cartCollection.find(query).toArray();
-     return res.send(order)
-     }
-     else{
-      return  res.status(403).send({message: "Forbidden access"})
-     }
-      
+    app.post('/order', async (req, res) =>{
+      const cart = req.body;
+      const result = await orderCollection.insertMany(cart);
+      return res.send({success: true,result})
     })
-
+    app.get('/order/:user', async(req, res) =>{
+      const user = req.params.user;
+      console.log('id',user)
+      const result =await orderCollection.find({user}).toArray();
+      console.log(result)
+      res.send(result)
+  })
+ 
+ 
     app.delete('/carts/:id', async(req, res) =>{
       const id = req.params.id;
       const query = {_id:ObjectId(id)};
@@ -208,7 +204,7 @@ async function run(){
         $set: user
     };
     const result = await userCollection.updateOne(filter, updateDoc, options);
-    const token = jwt.sign({email: email}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+    const token = jwt.sign({email: email}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5h' })
     res.send({result, token});
     })
 
