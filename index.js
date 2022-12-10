@@ -163,6 +163,15 @@ async function run(){
           res.send(result)
   
     })
+      app.get('/orderDetails/:id', async(req, res) =>{
+        const id = req.params.id;
+        console.log('id',id)
+        const query = {_id:ObjectId(id)};
+        const result =await orderCollection.findOne(query);
+        console.log(result)
+          res.send(result)
+  
+    })
 
 
 
@@ -179,9 +188,8 @@ async function run(){
     })
     app.get('/order/:user', async(req, res) =>{
       const user = req.params.user;
-      console.log('id',user)
+      // console.log('id',user)
       const result =await orderCollection.find({user}).toArray();
-      console.log(result)
       res.send(result)
   })
  
@@ -221,7 +229,7 @@ async function run(){
           }
       };
     
-      console.log(updatedFinal)
+      // console.log(updatedFinal)
       const result = await cartCollection.updateOne(filter,updatedFinal, options);
       res.send(result);
   
