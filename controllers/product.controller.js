@@ -26,18 +26,10 @@ exports.getProducts = async (req,res, next)=>{
 exports.createProduct = async (req, res) =>{
   
     try{
-    // const arrayImages = [];
-    // for (let i = 0; i < req.file.length; i++) {
-    //    return arrayImages[i] = req.file.filename[i];
-        
-    // }
-    
+  
     const categoryParse = JSON.parse(req.body.category)
     console.log(categoryParse.category_id)
-    //  const product = new Product(req.body)
-      
-    //  const product = new Product({image:req.file.filename})
-    // req.body.image = req.file.path
+  
      const product = new Product({
         name:req.body.name,
         description:req.body.description,
@@ -53,14 +45,14 @@ exports.createProduct = async (req, res) =>{
     
     // in Category product Push start
    
-    //  const {_id:productId, category} = product;
-    //  await Category.updateOne({_id:category.id},
-    //     {$push:{products:productId}})
+     const {_id:productId, category} = product;
+     await Category.updateOne({_id:category.
+        category_id},
+        {$push:{products:productId}})
     // in Category Product push end
         
      const result = await product.save()
-    //  result.getName()
- 
+    
      res.status(200).json({
          status:'success',
          message:'Data inserted Successfully',
