@@ -2,15 +2,17 @@ const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema.Types;
 // Schema Design
 const productSchema = mongoose.Schema({
-    name:{
+    nameB:{
         type:String,
-        required:[true, 'Please Provide Product Name'],
+        required:[true, 'Please Provide Product Name in Bangla'],
         unique: true,
         trim:true,
     },
-    description:{
+    nameE:{
         type:String,
-        required:true,
+        required:[true, 'Please Provide Product Name in English'],
+        unique: true,
+        trim:true,
     },
     price:{
         type:Number,
@@ -33,6 +35,22 @@ const productSchema = mongoose.Schema({
         },
         message:'Quantity must be an Integer'
     },
+    discount:{
+        type:Number,
+        default:0,
+        min:[0, "Discount can't be negative"],
+        validate:{
+            validator:(value) =>{
+                const isInteger = Number.isInteger(value);
+                if(isInteger){
+                    return true;
+                }else{
+                    return false
+                }
+            }
+        },
+        message:'Discount must be an Integer'
+    },
     status:{
         type:String,
         required:true,
@@ -53,10 +71,56 @@ const productSchema = mongoose.Schema({
         }
 
     },
+    writer:{
+        writerName:{
+            type:String,
+            required:true
+        },
+        writer_id:{
+            type:ObjectId,
+            ref:"Writer",
+            required:true,
+        }
+
+    },
+    publication:{
+        publicationName:{
+            type:String,
+            required:true
+        },
+        publication_id:{
+            type:ObjectId,
+            ref:"Publication",
+            required:true,
+        }
+    },
+    bookFair:{
+        type:String,
+        default:null
+    },
+    productTags:[
+        String
+    ],
+    descriptionB:{
+        type:String,
+        
+    },
+    descriptionE:{
+        type:String,
+        
+    },
+    writerDetails:{
+        type:String,
+        
+    },
     image:{
         type:String,
         required:true
-    }
+    },
+    // productPdf:{
+    //     type:String,
+    //     required:true
+    // }
 },
 {
     timestamps:true

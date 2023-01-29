@@ -22,25 +22,64 @@ exports.getProducts = async (req,res, next)=>{
       })
     }
 }
+exports.getProductsDetails = async (req,res, next)=>{
+    try{
+        const id = req.params.id;
+    //     const query = {_id:ObjectId(id)};
+    //    const products = await Product.findOne(query)
+    //     where("name").equals(/\w/)
+    //    .where('quantity').gte(100)
+    const product = await Product.findById(id)
+       res.status(200).json({
+        status:'success',
+        message:'data get Success',
+        data:product
+       })
+    }catch(error){
+      res.status(400).json({
+        status:'failed',
+        message:'data not found',
+        error:error.message
+      })
+    }
+}
 
 exports.createProduct = async (req, res) =>{
   
     try{
-  
+      console.log(req.body)
+      console.log(req?.file)
     const categoryParse = JSON.parse(req.body.category)
-    console.log(categoryParse.category_id)
+    const writerParse = JSON.parse(req.body.writer)
+    const publicationParse = JSON.parse(req.body.publication)
+    // console.log(categoryParse.category_id)
   
      const product = new Product({
-        name:req.body.name,
-        description:req.body.description,
+        nameB:req.body.nameB,
+        nameE:req.body.nameE,
         price: req.body.price,
         quantity:req.body.quantity,
+        discount:req.body.discount,
         status:req.body.status,
         category:{
             categoryName:categoryParse.categoryName,
             category_id:categoryParse.category_id
         },
-        image:req?.file?.path
+        writer:{
+            writerName:writerParse.writerName,
+            writer_id:writerParse.writer_id
+        },
+        publication:{
+            publicationName:publicationParse.publicationName,
+            publication_id:publicationParse.publication_id
+        },
+        bookFair:req.body.bookFair,
+        productTags:req.body.productTags,
+        descriptionB:req.body.descriptionB,
+        descriptionE:req.body.descriptionE,
+        writerDetails:req.body.writerDetails,
+        image:req?.file?.path,
+        // productPdf:req?.file?.path
      })
     
     // in Category product Push start
@@ -68,8 +107,43 @@ exports.createProduct = async (req, res) =>{
  }
  exports.updateProduct = async(req, res, next)=>{
     try{
+        // console.log(req.body)
+        const categoryParse = JSON.parse(req.body.category)
+        const writerParse = JSON.parse(req.body.writer)
+        const publicationParse = JSON.parse(req.body.publication)
+       
         const {id} = req.params;
-        const result = await Product.updateOne({_id:id},{$set:req.body},{runValidators:true})
+        
+        const updateData = {
+            
+                nameB:req.body.nameB,
+                nameE:req.body.nameE,
+                price: req.body.price,
+                quantity:req.body.quantity,
+                discount:req.body.discount,
+                status:req.body.status,
+                category:{
+                    categoryName:categoryParse.categoryName,
+                    category_id:categoryParse.category_id
+                },
+                writer:{
+                    writerName:writerParse.writerName,
+                    writer_id:writerParse.writer_id
+                },
+                publication:{
+                    publicationName:publicationParse.publicationName,
+                    publication_id:publicationParse.publication_id
+                },
+                bookFair:req.body.bookFair,
+                // productTags:req.body.productTags,
+                descriptionB:req.body.descriptionB,
+                // descriptionE:req.body.descriptionE,
+                writerDetails:req.body.writerDetails,
+                // image:req?.file?.path,
+                // productPdf:req?.file?.path
+             }
+           console.log(updateData)
+        const result = await Product.updateOne({_id:id},{$set:JSON.parse(updateData)},{runValidators:true})
         res.status(200).json({
             status:'success',
             message:'Data updated Successfully',

@@ -9,6 +9,7 @@ router.route('/')
 .get(productController.getProducts)
 .post(uploader.single('image'), productController.createProduct)
 
-router.route('/:id').patch(productController.updateProduct)
+router.route('/:id').put(productController.updateProduct)
+router.route('/:id').get(productController.getProductsDetails)
 
 module.exports = router;

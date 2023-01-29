@@ -5,6 +5,6 @@ router.route('/')
 .post(categoryController.createCategory)
 .get(categoryController.getCategories)
 
-// router.route('/:id').patch(productController.updateProduct)
+router.route('/:id').get(categoryController.getCategoryDetails)
 
 module.exports = router;

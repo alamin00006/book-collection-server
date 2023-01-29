@@ -10,11 +10,11 @@ const storage = multer.diskStorage({
     }
   })
 
-const uploader = multer({
+const pdfUploader = multer({
     storage,
     fileFilter:(req, file, cb)=>{
         // const supportedImage = /pdf/;
-        const supportedImage = /png|jpg/;
+        const supportedImage = /pdf/;
         const extension = path.extname(file.originalname);
         if(supportedImage.test(extension)){
             cb(null, true)
@@ -26,4 +26,4 @@ const uploader = multer({
         fileSize:5000000
     }
 })
-module.exports = uploader;
+module.exports = pdfUploader;

@@ -4,10 +4,8 @@ exports.createCategory = async (req, res) =>{
 
     try{
      const category = new Category(req.body)
- 
      const result = await category.save()
-    //  result.getName()
- 
+
      res.status(200).json({
          status:'success',
          message:'Category inserted Successfully',
@@ -41,4 +39,26 @@ exports.createCategory = async (req, res) =>{
         error:error.message
       })
     }
+}
+
+exports.getCategoryDetails = async (req,res)=>{
+  try{
+    const id = req.params.id;
+  //     const query = {_id:ObjectId(id)};
+  //    const products = await Product.findOne(query)
+  //     where("name").equals(/\w/)
+  //    .where('quantity').gte(100)
+  const order = await Category.findById(id).populate('products')
+     res.status(200).json({
+      status:'success',
+      message:'data get Success',
+      data:order
+     })
+  }catch(error){
+    res.status(400).json({
+      status:'failed',
+      message:'data not found',
+      error:error.message
+    })
+  }
 }
