@@ -114,13 +114,13 @@ const productSchema = mongoose.Schema({
         
     },
     image:{
-        type:String,
+        type:Array,
         required:true
     },
-    // productPdf:{
-    //     type:String,
-    //     required:true
-    // }
+    productPdf:{
+        type:Array,
+    }
+ 
 },
 {
     timestamps:true

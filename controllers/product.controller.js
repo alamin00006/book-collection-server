@@ -1,6 +1,22 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const UploadProductImage = require('../models/UploadProductImage');
+const fs= require('fs');
+const path=require('path');
+const dirPath= path.join(__dirname,'../public/uploads');
+// console.log(dirPath)
+// for(i=0;i<5;i++)
+// {
+//     fs.writeFileSync(`${dirPath}/hello${i}.txt`,"some simple text in file")
+
+// }
+
+// fs.readdir(dirPath,(err,files)=>{
+//     files.forEach((item)=>{
+      
+//     });
+// }
+// )
 
 
 exports.getProducts = async (req,res, next)=>{
@@ -47,8 +63,9 @@ exports.getProductsDetails = async (req,res, next)=>{
 exports.createProduct = async (req, res) =>{
   
     try{
-      console.log(req.body)
-      console.log(req?.file)
+    //   console.log(req.body)
+      console.log(req?.files.image[0].path)
+      console.log(req?.files.pdf[0].path)
     const categoryParse = JSON.parse(req.body.category)
     const writerParse = JSON.parse(req.body.writer)
     const publicationParse = JSON.parse(req.body.publication)
@@ -78,8 +95,8 @@ exports.createProduct = async (req, res) =>{
         descriptionB:req.body.descriptionB,
         descriptionE:req.body.descriptionE,
         writerDetails:req.body.writerDetails,
-        image:req?.file?.path,
-        // productPdf:req?.file?.path
+        image:req?.files.image[0].path,
+        productPdf:req?.files.pdf[0].path
      })
     
     // in Category product Push start
@@ -107,7 +124,8 @@ exports.createProduct = async (req, res) =>{
  }
  exports.updateProduct = async(req, res, next)=>{
     try{
-        // console.log(req.body)
+        console.log(req.body)
+        // console.log(req?.files)
         const categoryParse = JSON.parse(req.body.category)
         const writerParse = JSON.parse(req.body.writer)
         const publicationParse = JSON.parse(req.body.publication)
@@ -140,10 +158,10 @@ exports.createProduct = async (req, res) =>{
                 // descriptionE:req.body.descriptionE,
                 writerDetails:req.body.writerDetails,
                 // image:req?.file?.path,
-                // productPdf:req?.file?.path
+                productPdf:req?.file?.path
              }
-           console.log(updateData)
-        const result = await Product.updateOne({_id:id},{$set:JSON.parse(updateData)},{runValidators:true})
+        //    console.log(updateData)
+        const result = await Product.updateOne({_id:id},{$set:updateData},{runValidators:true})
         res.status(200).json({
             status:'success',
             message:'Data updated Successfully',
@@ -157,6 +175,91 @@ exports.createProduct = async (req, res) =>{
         })
     }
  }
+
+
+ exports.deleteProduct = async(req, res, next)=>{
+    try{
+      
+        const {id} = req.params;
+        const imageData = req.body.image[0].split('\\')[2]
+        const pdfData = req.body.productPdf[0].split('\\')[2]
+      
+          fs.readdir(dirPath,(err,files)=>{
+           const fileData = files.find(item => item === imageData)
+         
+
+        fs.stat(`./public/uploads/${fileData}`, function (err, stats) {
+    
+            if (err) {
+                return;
+            }
+         
+            fs.unlink(`./public/uploads/${fileData}`,function(err){
+                 if(err) return;
+                 
+            });  
+         });
+        
+        }
+        )
+          fs.readdir(dirPath,(err,pdfFiles)=>{
+           const pdfFile = pdfFiles.find(item => item === pdfData)
+        
+          fs.stat(`./public/uploads/${pdfFile}`, function (err, stats) {
+            if (err) {
+                return;
+            }
+         
+            fs.unlink(`./public/uploads/${pdfFile}`,function(err){
+                 if(err) return;
+            });  
+         });
+        
+        }
+        )
+        // const {_id:productId, category} = product;
+        //    await Category.deleteOne({products:})
+      
+        //    {$push:{products:productId}})
+
+
+        const result = await Product.deleteOne({_id:id})
+        res.status(200).json({
+            status:'success',
+            message:'delete Successfully',
+            data:result
+           })
+        //    console.log(result)
+    }catch(error){
+        res.status(400).json({
+            status:'failed',
+            message:'data not updated',
+            error:error.message
+        })
+    }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  exports.fileUpload = async(req, res, next)=>{
     try{
         console.log(req.file.filename)

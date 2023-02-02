@@ -6,7 +6,8 @@ const cors = require("cors");
 // middleware
 app.use(express.json());
 app.use(cors());
-app.use('/images', express.static('images'))
+app.use('/public/uploads', express.static('public/uploads'))
+// app.use('/images', express.static('images'))
 // routes
 const productRoute = require('./routes/product.route')
 const categoryRoute = require('./routes/category.route')
