@@ -4,19 +4,6 @@ const UploadProductImage = require('../models/UploadProductImage');
 const fs= require('fs');
 const path=require('path');
 const dirPath= path.join(__dirname,'../public/uploads');
-// console.log(dirPath)
-// for(i=0;i<5;i++)
-// {
-//     fs.writeFileSync(`${dirPath}/hello${i}.txt`,"some simple text in file")
-
-// }
-
-// fs.readdir(dirPath,(err,files)=>{
-//     files.forEach((item)=>{
-      
-//     });
-// }
-// )
 
 
 exports.getProducts = async (req,res, next)=>{
@@ -217,19 +204,17 @@ exports.createProduct = async (req, res) =>{
         
         }
         )
-        // const {_id:productId, category} = product;
-        //    await Category.deleteOne({products:})
-      
-        //    {$push:{products:productId}})
 
+       const result = await Product.findByIdAndDelete({_id:id})
 
-        const result = await Product.deleteOne({_id:id})
+      await Category.findOneAndUpdate({ products: id }, { $pull: { products: id } }, { new: true });
+
         res.status(200).json({
             status:'success',
             message:'delete Successfully',
             data:result
            })
-        //    console.log(result)
+      
     }catch(error){
         res.status(400).json({
             status:'failed',

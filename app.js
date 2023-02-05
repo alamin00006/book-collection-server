@@ -16,6 +16,7 @@ const publicationRoute = require('./routes/publication.route')
 const bookFairRoute = require('./routes/bookFair.route')
 const couponRoute = require('./routes/coupon.route')
 const orderRoute = require('./routes/order.route')
+// const plateletRoute = require('./routes/platelet.route')
 
 app.use('/api/v1/product', productRoute)
 app.use('/api/v1/category', categoryRoute)
@@ -24,6 +25,7 @@ app.use('/api/v1/publication', publicationRoute)
 app.use('/api/v1/book-fair', bookFairRoute)
 app.use('/api/v1/coupon-add', couponRoute)
 app.use('/api/v1/order', orderRoute)
+// app.use('/api/v1/platelet', plateletRoute)
 
 app.get("/", (req, res) => {
   res.send("Route is working! YaY!");
