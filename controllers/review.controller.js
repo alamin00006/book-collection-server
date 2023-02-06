@@ -1,14 +1,14 @@
-const Platelet = require("../models/Platelet")
+const Review = require("../models/Review")
 
-exports.createPlatelet = async (req, res) =>{
+exports.createReview = async (req, res) =>{
   
     try{
       console.log(req.body)
 
 
-     const platelet = new Platelet(req.body)
+     const review = new Review(req.body)
      
-     const result = await platelet.save()
+     const result = await review.save()
     
      res.status(200).json({
          status:'success',
@@ -24,21 +24,21 @@ exports.createPlatelet = async (req, res) =>{
     }
  }
 
- exports.getPlatelets = async (req,res,)=>{
+ exports.getReviews = async (req,res,)=>{
     try{
-       const products = await Platelet.find({})
+       const reviews = await Review.find({})
     //     where("name").equals(/\w/)
     //    .where('quantity').gte(100)
     // const products = await Product.findById('63b278bdceb2c72867ad2964')
        res.status(200).json({
         status:'success',
-        message:'data get Success',
-        data:products
+        message:'Review get Success',
+        data:reviews
        })
     }catch(error){
       res.status(400).json({
         status:'failed',
-        message:'data not found',
+        message:'Review not found',
         error:error.message
       })
     }

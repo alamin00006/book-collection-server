@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router()
-const plateletController = require('../controllers/platelet.controller')
+const reviewController = require('../controllers/review.controller')
 
 router.route('/')
-.get(plateletController.getPlatelets)
-.post(plateletController.createPlatelet)
+.get(reviewController.getReviews)
+.post(reviewController.createReview)
 
 // router.route('/:id').put( productController.updateProduct)
 // router.route('/:id').get(productController.getProductsDetails)
