@@ -26,8 +26,8 @@ exports.createReview = async (req, res) =>{
 
  exports.getReviews = async (req,res,)=>{
     try{
-      console.log(req.params.id)
-      const id = req.params.id;
+      // console.log(req.params.id)
+      // const id = req.params.id;
        const reviews = await Review.find({})
     //     where("name").equals(/\w/)
     //    .where('quantity').gte(100)
