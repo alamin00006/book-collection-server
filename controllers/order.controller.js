@@ -4,6 +4,7 @@ const Order = require('../models/Order');
 exports.getOrders = async (req,res, next)=>{
     try{
         const user = req.params.user;
+        console.log(user)
          const orders = await Order.find({user})
     //     where("name").equals(/\w/)
     //    .where('quantity').gte(100)

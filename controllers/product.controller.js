@@ -140,14 +140,11 @@ exports.createProduct = async (req, res) =>{
                     publication_id:publicationParse.publication_id
                 },
                 bookFair:req.body.bookFair,
-                // productTags:req.body.productTags,
                 descriptionB:req.body.descriptionB,
-                // descriptionE:req.body.descriptionE,
                 writerDetails:req.body.writerDetails,
-                // image:req?.file?.path,
-                productPdf:req?.file?.path
+                        
              }
-        //    console.log(updateData)
+    
         const result = await Product.updateOne({_id:id},{$set:updateData},{runValidators:true})
         res.status(200).json({
             status:'success',

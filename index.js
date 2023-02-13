@@ -1,5 +1,5 @@
 
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const DBConnect = require("./utilis/dbConnect");
 const app = require("./app");
 

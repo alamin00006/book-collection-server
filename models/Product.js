@@ -5,13 +5,13 @@ const productSchema = mongoose.Schema({
     nameB:{
         type:String,
         required:[true, 'Please Provide Product Name in Bangla'],
-        unique: true,
+        // unique: true,
         trim:true,
     },
     nameE:{
         type:String,
         required:[true, 'Please Provide Product Name in English'],
-        unique: true,
+        // unique: true,
         trim:true,
     },
     price:{

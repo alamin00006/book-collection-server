@@ -11,7 +11,7 @@ router.route('/')
 .get(productController.getProducts)
 .post(productFile, productController.createProduct)
 
-router.route('/:id').put( productController.updateProduct)
+router.route('/:id').patch( productController.updateProduct)
 router.route('/:id').get(productController.getProductsDetails)
 .delete(productController.deleteProduct)
 

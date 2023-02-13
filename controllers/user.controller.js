@@ -1,10 +1,44 @@
+require("dotenv").config();
 const User = require('../models/User');
 const { generateToken } = require('../utilis/token');
+const nodemailer = require('nodemailer');
+var sgTransport = require('nodemailer-sendgrid-transport');
+
+
+const options = {
+    auth: {
+      api_key: process.env.EMAIL_SENDER_KEY
+     }
+  }
+let mailer = nodemailer.createTransport(sgTransport(options))
+
+function sendBookingEmail() {
+  
+    const email = {
+        to: 'alaminbamna08@gmail.com',
+        from: 'mohammadalamin1090@gmail.com',
+        subject: 'Hi there',
+        text: 'Awesome sauce',
+        html: '<b>Awesome sauce</b>'
+    };
+     
+    mailer.sendMail(email, function(err, res) {
+        if (err) { 
+            console.log('amar error'+err) 
+        }
+        console.log('res data ' + res.response);
+    });
+}
+
+
+
+
 
 exports.createUser = async (req, res) =>{
 
     try{
-    //  const user = new User(req.body)
+    console.log(req.body)
+    
      const result = await User.create(req.body)
 
      res.status(200).json({
@@ -21,7 +55,8 @@ exports.createUser = async (req, res) =>{
     }
  }
 exports.createLogin = async (req, res) =>{
-   console.log(req.body)
+//    console.log(req.body)
+    // sendBookingEmail('alaminbamna08@gmail.com')
     try{
     const {email, password} = req.body;
     if(!email ||!password){
@@ -72,10 +107,10 @@ exports.getMe = async (req, res) =>{
     try{
     const email =  req?.user?.email
      const user = await User.findOne({email})
-
+     const {password:pwd, ...others} = user.toObject();
      res.status(200).json({
          status:'success',
-         data:user
+         data:others
         })
     }catch(error){
      res.status(400).json({
