@@ -1,34 +1,34 @@
 require("dotenv").config();
 const User = require('../models/User');
 const { generateToken } = require('../utilis/token');
-const nodemailer = require('nodemailer');
-var sgTransport = require('nodemailer-sendgrid-transport');
+// const nodemailer = require('nodemailer');
+// var sgTransport = require('nodemailer-sendgrid-transport');
 
 
-const options = {
-    auth: {
-      api_key: process.env.EMAIL_SENDER_KEY
-     }
-  }
-let mailer = nodemailer.createTransport(sgTransport(options))
+// const options = {
+//     auth: {
+//       api_key: process.env.EMAIL_SENDER_KEY
+//      }
+//   }
+// let mailer = nodemailer.createTransport(sgTransport(options))
 
-function sendBookingEmail() {
+// function sendBookingEmail() {
   
-    const email = {
-        to: 'alaminbamna08@gmail.com',
-        from: 'mohammadalamin1090@gmail.com',
-        subject: 'Hi there',
-        text: 'Awesome sauce',
-        html: '<b>Awesome sauce</b>'
-    };
+//     const email = {
+//         to: 'alaminbamna08@gmail.com',
+//         from: 'mohammadalamin1090@gmail.com',
+//         subject: 'Hi there',
+//         text: 'Awesome sauce',
+//         html: '<b>Awesome sauce</b>'
+//     };
      
-    mailer.sendMail(email, function(err, res) {
-        if (err) { 
-            console.log('amar error'+err) 
-        }
-        console.log('res data ' + res.response);
-    });
-}
+//     mailer.sendMail(email, function(err, res) {
+//         if (err) { 
+//             console.log('amar error'+err) 
+//         }
+//         console.log('res data ' + res.response);
+//     });
+// }
 
 
 
@@ -37,8 +37,14 @@ function sendBookingEmail() {
 exports.createUser = async (req, res) =>{
 
     try{
-    console.log(req.body)
-    
+    const email = req.body.email;
+    const user = await User.findOne({email})
+    if(user){
+        return res.status(401).json({
+            status:'fail',
+            message:'Sorry This Email Already Exist'
+        })
+    }
      const result = await User.create(req.body)
 
      res.status(200).json({
@@ -56,7 +62,6 @@ exports.createUser = async (req, res) =>{
  }
 exports.createLogin = async (req, res) =>{
 //    console.log(req.body)
-    // sendBookingEmail('alaminbamna08@gmail.com')
     try{
     const {email, password} = req.body;
     if(!email ||!password){
@@ -71,7 +76,7 @@ exports.createLogin = async (req, res) =>{
      if(!user){
         return res.status(401).json({
             status:'fail',
-            message:'No user Found, Please create an account'
+            message:'Sorry No user Found, Please create an account'
         })
     }
 
@@ -107,7 +112,7 @@ exports.getMe = async (req, res) =>{
     try{
     const email =  req?.user?.email
      const user = await User.findOne({email})
-     const {password:pwd, ...others} = user.toObject();
+     const {password:pwd, ...others} = user?.toObject();
      res.status(200).json({
          status:'success',
          data:others
@@ -116,6 +121,24 @@ exports.getMe = async (req, res) =>{
      res.status(400).json({
          status:'failed',
          message:'Please Log in',
+         error:error.message
+     })
+    }
+ }
+exports.allUser = async (req, res) =>{
+
+    try{
+    // const email =  req?.user?.email
+     const user = await User.find({})
+    //  const {password:pwd2, ...others} = user?.toObject();
+     res.status(200).json({
+         status:'success',
+         data:user
+        })
+    }catch(error){
+     res.status(400).json({
+         status:'failed',
+         message:'no user found',
          error:error.message
      })
     }

@@ -4,7 +4,7 @@ const productController = require('../controllers/product.controller')
 // const uploader = require('../middleware/uploader');
 const productFile = require('../middleware/uploader');
 // const pdfUploader = require('../middleware/pdfUploader');
-
+const verifyToken = require("../middleware/verifyToken");
 // router.post('/file-upload', uploader.single('image'), productController.fileUpload)
 
 router.route('/')

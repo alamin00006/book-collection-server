@@ -3,7 +3,7 @@ const Review = require("../models/Review")
 exports.createReview = async (req, res) =>{
   
     try{
-      console.log(req.body)
+      // console.log(req.body)
 
 
      const review = new Review(req.body)
@@ -12,7 +12,7 @@ exports.createReview = async (req, res) =>{
     
      res.status(200).json({
          status:'success',
-         message:'Data inserted Successfully',
+         message:'Thank you for the review, we will publish it soon.',
          data:result
         })
     }catch(error){

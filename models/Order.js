@@ -59,6 +59,11 @@ const orderSchema = mongoose.Schema({
     nagadTrx:{
         type:String,
     },
+    orderStatus:{
+        type:String,
+        enum:['Pending','Approved','Cancel'],
+        default:"Pending"
+    },
     
 },
 {

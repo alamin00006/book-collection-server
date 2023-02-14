@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router()
 const userController = require('../controllers/user.controller');
 const verifyToken = require("../middleware/verifyToken");
+router.route('/')
+.get(userController.allUser)
+
 router.route('/signup')
 .post(userController.createUser)
 
