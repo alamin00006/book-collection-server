@@ -1,6 +1,25 @@
 const Order = require('../models/Order');
 
 
+exports.getAllOrders = async (req,res, next)=>{
+    try{
+      const orders = await Order.find({})
+    //     where("name").equals(/\w/)
+    //    .where('quantity').gte(100)
+    // const products = await Product.findById('63b278bdceb2c72867ad2964')
+       res.status(200).json({
+        status:'success',
+        message:'All Order get Success',
+        data:orders
+       })
+    }catch(error){
+      res.status(400).json({
+        status:'failed',
+        message:'Sorry Order not found',
+        error:error.message
+      })
+    }
+}
 exports.getOrders = async (req,res, next)=>{
     try{
         const user = req.params.user;
@@ -68,20 +87,45 @@ exports.createOrder = async (req, res) =>{
      })
     }
  }
-//  exports.updateProduct = async(req, res, next)=>{
-//     try{
-//         const {id} = req.params;
-//         const result = await Product.updateOne({_id:id},{$set:req.body},{runValidators:true})
-//         res.status(200).json({
-//             status:'success',
-//             message:'Data updated Successfully',
-//             data:result
-//            })
-//     }catch(error){
-//         res.status(400).json({
-//             status:'failed',
-//             message:'data not updated',
-//             error:error.message
-//         })
-//     }
-//  }
+
+ exports.deleteOrder = async(req, res, next)=>{
+  try{
+    
+      const {id} = req.params;
+      const result = await Order.findByIdAndDelete({_id:id})
+
+      res.status(200).json({
+          status:'success',
+          message:'Order delete Successfully',
+          data:result
+         })
+    
+  }catch(error){
+      res.status(400).json({
+          status:'failed',
+          message:'Order not Delete',
+          error:error.message
+      })
+  }
+}
+
+
+
+
+ exports.orderStastusUpdate = async(req, res, next)=>{
+    try{
+        const {id} = req.params;
+        const result = await Order.updateOne({_id:id},{$set:req.body},{runValidators:true})
+        res.status(200).json({
+            status:'success',
+            message:'Wow! This Order Approved',
+            data:result
+           })
+    }catch(error){
+        res.status(400).json({
+            status:'failed',
+            message:'Status not updated',
+            error:error.message
+        })
+    }
+ }
