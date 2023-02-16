@@ -114,13 +114,25 @@ exports.createOrder = async (req, res) =>{
 
  exports.orderStastusUpdate = async(req, res, next)=>{
     try{
+        const orderStatus = req.body?.orderStatus;
         const {id} = req.params;
         const result = await Order.updateOne({_id:id},{$set:req.body},{runValidators:true})
-        res.status(200).json({
+        if(orderStatus==="Cancelled"){
+          res.status(200).json({
+            status:'success',
+            message:'This Order Cancelled',
+            data:result
+           })
+        }
+        if(orderStatus==="Approved"){
+          res.status(200).json({
             status:'success',
             message:'Wow! This Order Approved',
             data:result
            })
+        }
+       
+       
     }catch(error){
         res.status(400).json({
             status:'failed',
