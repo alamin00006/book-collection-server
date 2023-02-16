@@ -5,7 +5,6 @@ exports.createReview = async (req, res) =>{
     try{
       // console.log(req.body)
 
-
      const review = new Review(req.body)
      
      const result = await review.save()
@@ -44,4 +43,47 @@ exports.createReview = async (req, res) =>{
         error:error.message
       })
     }
+}
+
+exports.reviewStastusUpdate = async(req, res, next)=>{
+  try{
+    
+      const {id} = req.params;
+      const result = await Review.updateOne({_id:id},{$set:req.body},{runValidators:true})
+   
+        res.status(200).json({
+          status:'success',
+          message:'Review Approved',
+          data:result
+         })
+     
+     
+  }catch(error){
+      res.status(400).json({
+          status:'failed',
+          message:' Review Status not updated',
+          error:error.message
+      })
+  }
+}
+
+exports.deleteReview = async(req, res, next)=>{
+  try{
+    
+      const {id} = req.params;
+      const result = await Review.findByIdAndDelete({_id:id})
+
+      res.status(200).json({
+          status:'success',
+          message:'Review delete Successfully',
+          data:result
+         })
+    
+  }catch(error){
+      res.status(400).json({
+          status:'failed',
+          message:'Review not Delete',
+          error:error.message
+      })
+  }
 }

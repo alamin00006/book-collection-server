@@ -8,14 +8,55 @@ const dirPath= path.join(__dirname,'../public/uploads');
 
 exports.getProducts = async (req,res, next)=>{
     try{
-       const products = await Product.find({})
-    //     where("name").equals(/\w/)
-    //    .where('quantity').gte(100)
-    // const products = await Product.findById('63b278bdceb2c72867ad2964')
+        const productTotalCount = await Product.countDocuments({})
+        const page = parseInt(req.query?.page)
+        const size = parseInt(req.query?.size)
+          if(page || size){
+            const products = await Product.find({}).skip(page*size).limit(size);
+            res.status(200).json({
+                status:'success',
+                message:'data get Success',
+                data:{
+                    products,
+                    productTotalCount
+                }
+               })
+          }
+          else{
+            const products = await Product.find({})
+            res.status(200).json({
+                status:'success',
+                message:'data get Success',
+                data:products
+                 
+               })
+          }
+            
+             
+    }catch(error){
+      res.status(400).json({
+        status:'failed',
+        message:'data not found',
+        error:error.message
+      })
+    }
+}
+
+exports.getAllProductsManage = async (req,res, next)=>{
+    try{
+
+       const page = parseInt(req.query?.page)
+       const size = parseInt(req.query?.size)
+       const productTotalCount = await Product.countDocuments({})
+       const products = await Product.find({}).skip(page*size).limit(size)
+ 
        res.status(200).json({
         status:'success',
         message:'data get Success',
-        data:products
+        data:{
+            products,
+            productTotalCount
+        }
        })
     }catch(error){
       res.status(400).json({
@@ -98,13 +139,13 @@ exports.createProduct = async (req, res) =>{
     
      res.status(200).json({
          status:'success',
-         message:'Data inserted Successfully',
+         message:'Product Upload Successfully',
          data:result
         })
     }catch(error){
      res.status(400).json({
          status:'failed',
-         message:'data not inserted',
+         message:'Sorry Something is Wrong',
          error:error.message
      })
     }

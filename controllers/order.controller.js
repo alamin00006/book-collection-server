@@ -3,14 +3,22 @@ const Order = require('../models/Order');
 
 exports.getAllOrders = async (req,res, next)=>{
     try{
-      const orders = await Order.find({})
+
+      const page = parseInt(req.query?.page)
+      const size = parseInt(req.query?.size)
+      const orders = await Order.find({}).skip(page*size).limit(size)
+      const orderTotalCount = await Order.countDocuments({})
+     
     //     where("name").equals(/\w/)
     //    .where('quantity').gte(100)
     // const products = await Product.findById('63b278bdceb2c72867ad2964')
        res.status(200).json({
         status:'success',
         message:'All Order get Success',
-        data:orders
+        data:{
+          orders,
+          orderTotalCount
+        }
        })
     }catch(error){
       res.status(400).json({
