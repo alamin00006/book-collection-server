@@ -123,10 +123,12 @@ exports.createProduct = async (req, res) =>{
         descriptionB:req.body.descriptionB,
         descriptionE:req.body.descriptionE,
         writerDetails:req.body.writerDetails,
+        BookSalesInfo:req.body.BookSalesInfo,
         image:req?.files.image[0].path,
         productPdf:req?.files.pdf[0].path
      })
     
+ 
     // in Category product Push start
    
      const {_id:productId, category} = product;
@@ -183,6 +185,8 @@ exports.createProduct = async (req, res) =>{
                 bookFair:req.body.bookFair,
                 descriptionB:req.body.descriptionB,
                 writerDetails:req.body.writerDetails,
+                BookSalesInfo:req.body.BookSalesInfo,
+                
                         
              }
     

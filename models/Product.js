@@ -113,12 +113,18 @@ const productSchema = mongoose.Schema({
         type:String,
         
     },
+   BookSalesInfo:{
+        type:String,
+        
+    },
+   
     image:{
         type:Array,
         required:true
     },
     productPdf:{
         type:Array,
+        required:true
     }
  
 },
