@@ -11,7 +11,22 @@ exports.getProducts = async (req,res, next)=>{
         const productTotalCount = await Product.countDocuments({})
         const page = parseInt(req.query?.page)
         const size = parseInt(req.query?.size)
-          if(page || size){
+        const {BookSalesInfo} = req.query
+        // console.log(BookSalesInfo)
+        
+          if(page || size && BookSalesInfo){
+            const products = await Product.find({BookSalesInfo:BookSalesInfo}).skip(page*size).limit(size);
+            const weeksProductTotalCount = await Product.countDocuments({BookSalesInfo:BookSalesInfo})
+            res.status(200).json({
+                status:'success',
+                message:'data get Success',
+                data:{
+                    products,
+                    weeksProductTotalCount
+                }
+               })
+          }
+          else if(page || size){
             const products = await Product.find({}).skip(page*size).limit(size);
             res.status(200).json({
                 status:'success',

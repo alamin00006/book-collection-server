@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
-
-const uri = process.env.DATABASE_LOCAL;
+// x8GxyDDhz6QOyn0e
+// const uri = process.env.DATABASE_LOCAL;
 
 const options = {
     useNewUrlParser: true,
@@ -13,6 +13,11 @@ const options = {
     socketTimeoutMS: 45000, 
     family: 4,
 }
+
+
+const uri = "mongodb+srv://booktarikul:x8GxyDDhz6QOyn0e@cluster0.scp6egc.mongodb.net/?retryWrites=true&w=majority";
+
+
 
 const connectWithDB = () => {
     mongoose.connect(uri, options, (err, db) => {
