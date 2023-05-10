@@ -1,6 +1,8 @@
 const Product = require("../models/Product");
 const Category = require("../models/Category");
-const UploadProductImage = require("../models/UploadProductImage");
+const Publication = require("../models/Publication");
+const Writer = require("../models/Writer");
+
 const fs = require("fs");
 const path = require("path");
 const dirPath = path.join(__dirname, "../public/uploads");
@@ -14,7 +16,8 @@ exports.getProducts = async (req, res, next) => {
     if (page || size) {
       const products = await Product.find({})
         .skip(page * size)
-        .limit(size);
+        .limit(size)
+        .sort({ createdAt: -1 });
       res.status(200).json({
         status: "success",
         message: "data get Success",
@@ -24,7 +27,7 @@ exports.getProducts = async (req, res, next) => {
         },
       });
     } else {
-      const products = await Product.find({});
+      const products = await Product.find({}).sort({ createdAt: -1 });
       res.status(200).json({
         status: "success",
         message: "data get Success",
@@ -88,13 +91,9 @@ exports.getProductsDetails = async (req, res, next) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    //   console.log(req.body)
-    console.log(req?.files.image[0].path);
-    console.log(req?.files.pdf[0].path);
     const categoryParse = JSON.parse(req.body.category);
     const writerParse = JSON.parse(req.body.writer);
     const publicationParse = JSON.parse(req.body.publication);
-    // console.log(categoryParse.category_id)
 
     const product = new Product({
       nameB: req.body.nameB,
@@ -124,15 +123,24 @@ exports.createProduct = async (req, res) => {
       image: req?.files.image[0].path,
       productPdf: req?.files.pdf[0].path,
     });
-
-    // in Category product Push start
-
-    const { _id: productId, category } = product;
+    const { _id: productId, category, writer, publication } = product;
+    // in Category product Push
     await Category.updateOne(
       { _id: category.category_id },
       { $push: { products: productId } }
     );
-    // in Category Product push end
+
+    // in Writer product Push
+    await Writer.updateOne(
+      { _id: writer.writer_id },
+      { $push: { products: productId } }
+    );
+
+    // in Publication product Push
+    await Publication.updateOne(
+      { _id: publication.publication_id },
+      { $push: { products: productId } }
+    );
 
     const result = await product.save();
 
@@ -253,26 +261,6 @@ exports.deleteProduct = async (req, res, next) => {
     res.status(400).json({
       status: "failed",
       message: "data not updated",
-      error: error.message,
-    });
-  }
-};
-
-exports.fileUpload = async (req, res, next) => {
-  try {
-    console.log(req.file.filename);
-    const imageFile = new UploadProductImage({ image: req.file.filename });
-
-    const image = await imageFile.save();
-    res.status(200).json({
-      status: "success",
-      message: "image uploaded Successfully",
-      data: image,
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "failed",
-      message: "image not upload",
       error: error.message,
     });
   }
