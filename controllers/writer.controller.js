@@ -44,12 +44,12 @@ exports.getWriterDetails = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const categoryProduct = await Category.findById(id).populate("products");
+    const writerProduct = await Writer.findById(id).populate("products");
 
     res.status(200).json({
       status: "success",
       message: "data get Success",
-      data: categoryProduct,
+      data: writerProduct,
     });
   } catch (error) {
     res.status(400).json({
