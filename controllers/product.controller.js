@@ -43,30 +43,6 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
-// exports.getAllProductsManage = async (req,res, next)=>{
-//     try{
-
-//        const page = parseInt(req.query?.page)
-//        const size = parseInt(req.query?.size)
-//        const productTotalCount = await Product.countDocuments({})
-//        const products = await Product.find({}).skip(page*size).limit(size)
-
-//        res.status(200).json({
-//         status:'success',
-//         message:'data get Success',
-//         data:{
-//             products,
-//             productTotalCount
-//         }
-//        })
-//     }catch(error){
-//       res.status(400).json({
-//         status:'failed',
-//         message:'data not found',
-//         error:error.message
-//       })
-//     }
-// }
 exports.getProductsDetails = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -92,12 +68,14 @@ exports.getProductsDetails = async (req, res, next) => {
 exports.createProduct = async (req, res) => {
   try {
     const categoryParse = JSON.parse(req.body.category);
+
     const writerParse = JSON.parse(req.body.writer);
     const publicationParse = JSON.parse(req.body.publication);
 
     const product = new Product({
       nameB: req.body.nameB,
       nameE: req.body.nameE,
+      bookTranslator: req.body.bookTranslator,
       price: req.body.price,
       quantity: req.body.quantity,
       discount: req.body.discount,
@@ -108,6 +86,7 @@ exports.createProduct = async (req, res) => {
       },
       writer: {
         writerName: writerParse.writerName,
+        writerDetails: writerParse.writerDetails,
         writer_id: writerParse.writer_id,
       },
       publication: {
@@ -118,10 +97,10 @@ exports.createProduct = async (req, res) => {
       productTags: req.body.productTags,
       descriptionB: req.body.descriptionB,
       descriptionE: req.body.descriptionE,
-      writerDetails: req.body.writerDetails,
       BookSalesInfo: req.body.BookSalesInfo,
-      image: req?.files.image[0].path,
-      productPdf: req?.files.pdf[0].path,
+      image: req.body.image,
+      // image: req?.files.image[0].path,
+      // productPdf: req?.files.pdf[0].path,
     });
     const { _id: productId, category, writer, publication } = product;
     // in Category product Push
@@ -159,7 +138,6 @@ exports.createProduct = async (req, res) => {
 };
 exports.updateProduct = async (req, res, next) => {
   try {
-    console.log(req.body);
     // console.log(req?.files)
     const categoryParse = JSON.parse(req.body.category);
     const writerParse = JSON.parse(req.body.writer);
@@ -214,35 +192,35 @@ exports.updateProduct = async (req, res, next) => {
 exports.deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const imageData = req.body.image[0].split("\\")[2];
-    const pdfData = req.body.productPdf[0].split("\\")[2];
+    // const imageData = req.body.image[0].split("\\")[2];
+    // const pdfData = req.body.productPdf[0].split("\\")[2];
 
-    fs.readdir(dirPath, (err, files) => {
-      const fileData = files.find((item) => item === imageData);
+    // fs.readdir(dirPath, (err, files) => {
+    //   const fileData = files.find((item) => item === imageData);
 
-      fs.stat(`./public/uploads/${fileData}`, function (err, stats) {
-        if (err) {
-          return;
-        }
+    //   fs.stat(`./public/uploads/${fileData}`, function (err, stats) {
+    //     if (err) {
+    //       return;
+    //     }
 
-        fs.unlink(`./public/uploads/${fileData}`, function (err) {
-          if (err) return;
-        });
-      });
-    });
-    fs.readdir(dirPath, (err, pdfFiles) => {
-      const pdfFile = pdfFiles.find((item) => item === pdfData);
+    //     fs.unlink(`./public/uploads/${fileData}`, function (err) {
+    //       if (err) return;
+    //     });
+    //   });
+    // });
+    // fs.readdir(dirPath, (err, pdfFiles) => {
+    //   const pdfFile = pdfFiles.find((item) => item === pdfData);
 
-      fs.stat(`./public/uploads/${pdfFile}`, function (err, stats) {
-        if (err) {
-          return;
-        }
+    //   fs.stat(`./public/uploads/${pdfFile}`, function (err, stats) {
+    //     if (err) {
+    //       return;
+    //     }
 
-        fs.unlink(`./public/uploads/${pdfFile}`, function (err) {
-          if (err) return;
-        });
-      });
-    });
+    //     fs.unlink(`./public/uploads/${pdfFile}`, function (err) {
+    //       if (err) return;
+    //     });
+    //   });
+    // });
 
     const result = await Product.findByIdAndDelete({ _id: id });
 

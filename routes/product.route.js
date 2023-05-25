@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/product.controller");
-const productFile = require("../middleware/uploader");
+// const productFile = require("../middleware/uploader");
 const verifyToken = require("../middleware/verifyToken");
 router
   .route("/")
   .get(productController.getProducts)
-  .post(productFile, productController.createProduct);
+  .post(productController.createProduct);
 
 router.route("/:id").patch(productController.updateProduct);
 router

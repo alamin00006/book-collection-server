@@ -5,8 +5,9 @@ router
   .route("/")
   .post(publicationController.createPublication)
   .get(publicationController.getPublication);
-router.route("/:id").get(publicationController.getPublicationDetails);
-
-// router.route('/:id').patch(productController.updateProduct)
+router
+  .route("/:id")
+  .get(publicationController.getPublicationDetails)
+  .patch(publicationController.updatePublication);
 
 module.exports = router;

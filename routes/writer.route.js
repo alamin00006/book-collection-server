@@ -5,8 +5,9 @@ router
   .route("/")
   .post(writerController.createWriter)
   .get(writerController.getWriters);
-router.route("/:id").get(writerController.getWriterDetails);
-
-// router.route('/:id').patch(productController.updateProduct)
+router
+  .route("/:id")
+  .get(writerController.getWriterDetails)
+  .patch(writerController.updateWriter);
 
 module.exports = router;

@@ -6,10 +6,8 @@ const dirPath = path.join(__dirname, "../public/uploads");
 
 exports.createBanner = async (req, res) => {
   try {
-    console.log(req?.files.image[0].path);
-
     const banner = new Banner({
-      image: req?.files.image[0].path,
+      image: req.body?.image,
     });
     const result = await banner.save();
 
@@ -48,22 +46,22 @@ exports.getBanner = async (req, res) => {
 exports.deleteBanner = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    const imageData = req.body.image[0].split("\\")[2];
 
-    fs.readdir(dirPath, (err, files) => {
-      const fileData = files.find((item) => item === imageData);
+    // const imageData = req.body.image[0].split("\\")[2];
 
-      fs.stat(`./public/uploads/${fileData}`, function (err, stats) {
-        if (err) {
-          return;
-        }
+    // fs.readdir(dirPath, (err, files) => {
+    //   const fileData = files.find((item) => item === imageData);
 
-        fs.unlink(`./public/uploads/${fileData}`, function (err) {
-          if (err) return;
-        });
-      });
-    });
+    //   fs.stat(`./public/uploads/${fileData}`, function (err, stats) {
+    //     if (err) {
+    //       return;
+    //     }
+
+    //     fs.unlink(`./public/uploads/${fileData}`, function (err) {
+    //       if (err) return;
+    //     });
+    //   });
+    // });
 
     const result = await Banner.findByIdAndDelete({ _id: id });
 
@@ -75,7 +73,7 @@ exports.deleteBanner = async (req, res, next) => {
   } catch (error) {
     res.status(400).json({
       status: "failed",
-      message: "data not updated",
+      message: "data not Delete",
       error: error.message,
     });
   }

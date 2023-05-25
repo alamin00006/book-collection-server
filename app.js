@@ -18,7 +18,6 @@ const orderRoute = require("./routes/order.route");
 const reviewRoute = require("./routes/review.route");
 const bannerRoute = require("./routes/banner.route");
 const userRoute = require("./routes/user.route");
-// const plateletRoute = require('./routes/platelet.route')
 
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
@@ -30,10 +29,15 @@ app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/review", reviewRoute);
 app.use("/api/v1/banner", bannerRoute);
 app.use("/api/v1/user", userRoute);
-// app.use('/api/v1/platelet', plateletRoute)
 
 app.get("/", (req, res) => {
   res.send("Route is working! YaY!");
 });
-
+app.use((err, req, res, next) => {
+  if (err.message) {
+    res.status(500).send(err.message);
+  } else {
+    res.status(500).send("There was an error");
+  }
+});
 module.exports = app;
