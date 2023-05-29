@@ -16,8 +16,8 @@ exports.getProducts = async (req, res, next) => {
     if (page || size) {
       const products = await Product.find({})
         .skip(page * size)
-        .limit(size)
-        .sort({ createdAt: -1 });
+        .limit(size);
+
       res.status(200).json({
         status: "success",
         message: "data get Success",

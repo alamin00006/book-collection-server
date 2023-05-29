@@ -52,7 +52,7 @@ exports.getOrders = async (req, res, next) => {
 exports.getOrderDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log(id);
+    // console.log(id);
     //     const query = {_id:ObjectId(id)};
     //    const products = await Product.findOne(query)
     //     where("name").equals(/\w/)
